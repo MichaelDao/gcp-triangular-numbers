@@ -14,6 +14,8 @@ function display()
         $totalTri += $primes[$x];
     }
 
+    // make sure you fix the problem with S displayed in the textfile
+
     // values from the textboxes
     $valueA = intval($_POST['content-a']);
     $valueB = intval($_POST['content-b']);
@@ -36,7 +38,7 @@ function display()
     $url = "gs://s3668300-bucket/result-" . $arrlength . ".txt";
     $handle = fopen($url, 'w');
 
-    $writeString = "S: ".$valueM.
+    $writeString = "S: ".$totalTri.
         "\nA: ".$valueA.
         "\nB: ".$valueB.
         "\nC: ".$valueC.
