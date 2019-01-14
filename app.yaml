@@ -5,5 +5,5 @@ handlers:
 - url: /
   script: index.php
 
-- url: /lastForm
+- url: /.*
   script: lastForm.php

@@ -1,22 +1,15 @@
-<html>
-<head>
-	<title>PHP Triangle!</title>
-
-  <?php
-if (isset($_POST['submit'])) {
-    process();
-}
+<?php
+session_start();
 
 function process()
 {
+
     $value = intval($_POST['content']);
 
     if (5 <= $value && $value <= 25) {
-        echo "You wrote:<pre>\n";
-        echo htmlspecialchars($_POST['content']);
-        echo "\n</pre>";
-
-        $handle = fopen('gs://s3668300-bucket/triangular-n.txt', 'w');
+        $url = "gs://s3668300-bucket/triangular-". $value .".txt";
+        
+        $handle = fopen($url, 'w');
 
         // this is our string of triangles
         $triString = "";
@@ -34,20 +27,28 @@ function process()
         fwrite($handle, $triString);
 
         fclose($handle);
-        echo 'file created in GCS Bucket';
 
-        echo "<pre>";
-        echo $triString;
-        echo "</pre>";
+        $_SESSION['arrayLength'] = $value;
 
         echo "<script>location.href='lastForm';</script>";
         exit;
 
     } else {
-        printError();
+        validateError();
     }
 }
+
+function printError()
+{
+    echo '<div class="' . 'alert alert-danger' . '"';
+    echo 'role="' . 'alert' . '">';
+    echo '<strong>Oh snap!</strong> This number is not between 5 or 25.</div>';
+}
 ?>
+
+<html>
+<head>
+	<title>PHP Triangle!</title>
 	<style>
 		.card {
         	margin: 0 auto;
@@ -59,19 +60,22 @@ function process()
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
+
 <body>
 	<div class="form-group row">
   	<div class="card text-center">
-      <div class="card-header">Pyramid</div>
+      <div class="card-header">Pyramid Numbers</div>
       <div class="card-body">
         <h5 class="card-title">This is N:</h5>
         <p class="card-text">Please enter a number, we are gonna create a special pyramid.</p>
 <?php
-function printError()
+if (isset($_POST['submit'])) {
+    process();
+}
+
+function validateError()
 {
-    echo '<div class="' . 'alert alert-danger' . '"';
-    echo 'role="' . 'alert' . '">';
-    echo '<strong>Oh snap!</strong> This number is not between 5 or 25.</div>';
+    printError();
 }
 ?>
         <form action="/" method="post">
